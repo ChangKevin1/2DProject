@@ -57,12 +57,26 @@ public class HitTesting : MonoBehaviour
         healthSystem.SetActive(true);
         damageNumber.GetComponent<CFXR_ParticleText>().UpdateText(damage.ToString());
         damageNumber.GetComponent<ParticleSystem>().Play();
+        damageNumber.GetComponent<Transform>().position = transform.position;
         healthSystem.GetComponent<HealthSystem>().TakeDamage(damage);
         duration = 2;
         GameObject.Find("Main Camera").GetComponent<SmoothCamera>().zoomIn();
         Time.timeScale = 0.0f;
         hitPause = 10;
-        audio.PlayOneShot(audio.clip);
+        audio.Play();
+
+
+        HeroKnight hero = GetComponent<HeroKnight>();
+        if(hero != null && hero.enabled)
+        {
+            if (healthSystem.GetComponent<HealthSystem>().hitPoint == 0) {
+                hero.m_animator.SetBool("noBlood", false);
+                hero.m_animator.SetTrigger("Death");
+            }
+            else
+                hero.m_animator.SetTrigger("Hurt");
+
+        }
 
     }
     

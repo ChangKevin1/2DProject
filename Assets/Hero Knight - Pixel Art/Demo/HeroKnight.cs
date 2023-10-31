@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class HeroKnight : MonoBehaviour {
 
@@ -10,8 +11,9 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] GameObject m_slideDust;
     [SerializeField] AttackListener attackListener;
     [SerializeField] ParticleSystem swordTrail;
+    [SerializeField] bool control;
 
-    private Animator            m_animator;
+    public Animator            m_animator;
     private Rigidbody2D         m_body2d;
     private Sensor_HeroKnight   m_groundSensor;
     private Sensor_HeroKnight   m_wallSensorR1;
@@ -39,6 +41,7 @@ public class HeroKnight : MonoBehaviour {
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
+        Application.targetFrameRate = 144;
     }
 
     // Update is called once per frame
@@ -70,7 +73,8 @@ public class HeroKnight : MonoBehaviour {
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
         }
-
+        if (control == false)
+            return;
         // -- Handle input and movement --
         float inputX = Input.GetAxis("Horizontal");
 
@@ -133,8 +137,7 @@ public class HeroKnight : MonoBehaviour {
             m_timeSinceAttack = 0.0f;
             
             swordTrail.Play();
-            attackListener.attackTrigger = true;
-            audio.PlayOneShot(audio.clip);
+            audio.Play();
         }
 
         // Block
@@ -207,7 +210,9 @@ public class HeroKnight : MonoBehaviour {
     public void AttackStart()
     {
         Debug.Log("ATTACK START");
-        
+        attackListener.startAttack();
+        attackListener.attackTrigger = true;
+
     }
     public AudioSource audio;
 }

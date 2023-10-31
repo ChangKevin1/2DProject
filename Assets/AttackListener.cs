@@ -7,6 +7,13 @@ public class AttackListener : MonoBehaviour
 {
     public Boolean attackTrigger = false;
     public HitTesting hitOne = null;
+    public Collider2D collider;
+
+    private void Start()
+    {
+        collider = GetComponent<Collider2D>();
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag.Equals("enemy") )
@@ -20,7 +27,19 @@ public class AttackListener : MonoBehaviour
         {
             hitOne.beingAttacked();
             attackTrigger = false;
+            hitOne = null;
+            collider.enabled = false;
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        hitOne = null;
+    }
+
+    public void startAttack()
+    {
+        collider.enabled = true;
     }
 
 }
