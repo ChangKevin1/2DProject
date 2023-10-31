@@ -47,7 +47,7 @@ public class SmoothCamera : MonoBehaviour
                 }
             }
             // zoom in
-            if (depth > -1 && camera.GetComponent<Camera>().fieldOfView <= zoomMin[depth])
+            if (depth > -1 && camera.GetComponent<Camera>().fieldOfView <= zoomMin[depth] && zoomDir == -1)
             {
                 zoom = false;
                 camera.GetComponent<Camera>().fieldOfView = zoomMin[depth];

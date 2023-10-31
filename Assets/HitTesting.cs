@@ -61,7 +61,7 @@ public class HitTesting : MonoBehaviour
         duration = 2;
         GameObject.Find("Main Camera").GetComponent<SmoothCamera>().zoomIn();
         Time.timeScale = 0.0f;
-        hitPause = 6;
+        hitPause = 10;
         audio.PlayOneShot(audio.clip);
 
     }
