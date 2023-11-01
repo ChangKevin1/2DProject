@@ -65,12 +65,12 @@ namespace UnityEngine.Recorder.Examples
             };
 
             // Simple file name (no wildcards) so that FileInfo constructor works in OutputFile getter.
-            m_Settings.OutputFile = mediaOutputFolder.FullName + "/" + "video";
+            m_Settings.OutputFile = mediaOutputFolder.FullName + "/" + System.DateTime.Now.ToLongDateString()+System.DateTime.Now.ToLongTimeString() +"video";
 
             // Setup Recording
             controllerSettings.AddRecorderSettings(m_Settings);
             controllerSettings.SetRecordModeToManual();
-            controllerSettings.FrameRate = 60.0f;
+            controllerSettings.FrameRate = 144.0f;
 
             RecorderOptions.VerboseMode = false;
             m_RecorderController.PrepareRecording();

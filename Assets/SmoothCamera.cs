@@ -23,7 +23,7 @@ public class SmoothCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        camera.position = new Vector3(Mathf.Lerp(camera.position.x, followCube.position.x + offset.x, smoothSpeed ), Mathf.Lerp(camera.position.y, followCube.position.y+offset.y, smoothSpeed ) ,-10);
+        camera.position = new Vector3(Mathf.Lerp(camera.position.x, followCube.position.x + offset.x, smoothSpeed ), Mathf.Lerp(camera.position.y, followCube.position.y+offset.y, smoothSpeed ) ,-10 + offset.z);
         if (zoom == true)
         {
             camera.GetComponent<Camera>().fieldOfView = camera.GetComponent<Camera>().fieldOfView +  zoomDir * zoomDelta;
