@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SmoothCamera : MonoBehaviour
 {
@@ -18,12 +19,17 @@ public class SmoothCamera : MonoBehaviour
     [SerializeField] float zoomMax ;
     [SerializeField] List<float> zoomMin ;
     public int depth = -1;
+    Vector2 offsetMax = new Vector2(10, 10);
     // Start is called before the first frame update
-
+    Vector2 inputRightStick = new Vector2();
     // Update is called once per frame
     void Update()
     {
-        camera.position = new Vector3(Mathf.Lerp(camera.position.x, followCube.position.x + offset.x, smoothSpeed ), Mathf.Lerp(camera.position.y, followCube.position.y+offset.y, smoothSpeed ) ,-10 + offset.z);
+        if(Gamepad.all[0] != null)
+            inputRightStick = Gamepad.all[0].rightStick.value;
+        inputRightStick.x = Mathf.Clamp(inputRightStick.x *2 , -offsetMax.x, offsetMax.x);
+        inputRightStick.y = Mathf.Clamp(inputRightStick.y *2, -offsetMax.y, offsetMax.y);
+        camera.position = new Vector3(Mathf.Lerp(camera.position.x, followCube.position.x + offset.x + inputRightStick.x, smoothSpeed ), Mathf.Lerp(camera.position.y, followCube.position.y+offset.y + inputRightStick.y, smoothSpeed ) ,-10 + offset.z);
         if (zoom == true)
         {
             camera.GetComponent<Camera>().fieldOfView = camera.GetComponent<Camera>().fieldOfView +  zoomDir * zoomDelta;

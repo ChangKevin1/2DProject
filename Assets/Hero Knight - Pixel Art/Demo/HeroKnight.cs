@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class HeroKnight : MonoBehaviour {
 
     [SerializeField] float      m_speed = 4.0f;
-    [SerializeField] float      m_jumpForce = 7.5f;
+    [SerializeField] float      m_jumpDistance = 5f;
+    [SerializeField] float      m_jumpForce = 5.0f;
     [SerializeField] float      m_rollForce = 6.0f;
     [SerializeField] bool       m_noBlood = false;
     [SerializeField] GameObject m_slideDust;
@@ -29,7 +30,7 @@ public class HeroKnight : MonoBehaviour {
     private float               m_delayToIdle = 0.0f;
     private float               m_rollDuration = 8.0f / 14.0f;
     private float               m_rollCurrentTime;
-
+    private float               m_JumpStartPoint;
 
     // Use this for initialization
     void Start ()
@@ -118,7 +119,7 @@ public class HeroKnight : MonoBehaviour {
         }
 
         //Attack
-        else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
+        else if ( (Input.GetMouseButtonDown(0)  ) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
             m_currentAttack++;
 
@@ -152,22 +153,27 @@ public class HeroKnight : MonoBehaviour {
             m_animator.SetBool("IdleBlock", false);
 
         // Roll
-        else if (Input.GetKeyDown("left shift") && !m_rolling && !m_isWallSliding)
+        else if ( (Input.GetKeyDown(KeyCode.Z) ) && !m_rolling && !m_isWallSliding)
         {
             m_rolling = true;
             m_animator.SetTrigger("Roll");
             m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
         }
 
+        else if (Input.GetKey("space") && (transform.position.y - m_JumpStartPoint < m_jumpDistance) && m_body2d.velocity.y >= 0)
+        {
+            m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
+        }
 
         //Jump
-        else if (Input.GetKeyDown("space") && m_grounded && !m_rolling)
+        else if ((Input.GetKeyDown("space")  ) && m_grounded && !m_rolling)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
-            m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
             m_groundSensor.Disable(0.2f);
+            m_JumpStartPoint = transform.position.y;
+            m_body2d.velocity = new Vector2(m_body2d.velocity.x, 1);
         }
 
         //Run
@@ -186,6 +192,8 @@ public class HeroKnight : MonoBehaviour {
             if (m_delayToIdle < 0)
                 m_animator.SetInteger("AnimState", 0);
         }
+
+        
     }
 
     // Animation Events
