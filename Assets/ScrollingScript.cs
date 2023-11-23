@@ -42,7 +42,8 @@ public class ScrollingScript : MonoBehaviour
               t => t.transform.position.x
             ).ToList();
         }
-        verticalDistance = target.transform.position.y - transform.position.y;
+        if(target != null)
+            verticalDistance = target.transform.position.y - transform.position.y;
     }
     void Update()
     {

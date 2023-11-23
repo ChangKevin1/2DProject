@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using System;
+
 
 public class HeroKnight : MonoBehaviour {
 
@@ -42,7 +44,7 @@ public class HeroKnight : MonoBehaviour {
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
-        Application.targetFrameRate = 144;
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame
@@ -114,12 +116,12 @@ public class HeroKnight : MonoBehaviour {
         //Hurt
         else if (Input.GetKeyDown("q") && !m_rolling)
         {
-            HealthSystem.Instance.TakeDamage(Random.Range(1,10));
+            HealthSystem.Instance.TakeDamage(UnityEngine.Random.Range(1,10));
             m_animator.SetTrigger("Hurt");
         }
 
         //Attack
-        else if ( (Input.GetMouseButtonDown(0)  ) && m_timeSinceAttack > 0.25f && !m_rolling)
+        else if ( (Input.GetMouseButtonDown(0) ) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
             m_currentAttack++;
 
@@ -200,6 +202,7 @@ public class HeroKnight : MonoBehaviour {
     // Called in slide animation.
     void AE_SlideDust()
     {
+        Debug.Log("slide dust");
         Vector3 spawnPosition;
 
         if (m_facingDirection == 1)
@@ -210,7 +213,7 @@ public class HeroKnight : MonoBehaviour {
         if (m_slideDust != null)
         {
             // Set correct arrow spawn position
-            GameObject dust = Instantiate(m_slideDust, spawnPosition, gameObject.transform.localRotation) as GameObject;
+            GameObject dust = Instantiate(m_slideDust, spawnPosition, gameObject.transform.localRotation);
             // Turn arrow in correct direction
             dust.transform.localScale = new Vector3(m_facingDirection, 1, 1);
         }
@@ -218,7 +221,6 @@ public class HeroKnight : MonoBehaviour {
 
     public void AttackStart()
     {
-        Debug.Log("ATTACK START");
         attackListener.startAttack();
         attackListener.attackTrigger = true;
 

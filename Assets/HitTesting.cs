@@ -44,13 +44,13 @@ public class HitTesting : MonoBehaviour
         }
         if(hitPause == 0)
         {
-            int damage = Random.Range(1, 30);
-            hitEffect.transform.position = transform.position;
+            int damage = Random.Range(1, 20);
+            hitEffect.transform.position = new Vector3(transform.position.x-1.65f, transform.position.y+1.3f, -3);
             hitEffect.GetComponent<ParticleSystem>().Play();
             healthSystem.SetActive(true);
             damageNumber.GetComponent<CFXR_ParticleText>().UpdateText(damage.ToString());
             damageNumber.GetComponent<ParticleSystem>().Play();
-            damageNumber.GetComponent<Transform>().position = transform.position;
+            damageNumber.GetComponent<Transform>().position = new Vector3(transform.position.x - 1.5f, transform.position.y + 1.3f, -3);
             healthSystem.GetComponent<HealthSystem>().TakeDamage(damage);
             duration = 2;
             audio.Play();
@@ -69,7 +69,8 @@ public class HitTesting : MonoBehaviour
         
         Time.timeScale = 0.0f;
         hitPause = 10;
-        Gamepad.all[0].SetMotorSpeeds(0.6f, 0.7f);
+        if(Gamepad.current!=null)
+            Gamepad.all[0].SetMotorSpeeds(0.6f, 0.7f);
 
         HeroKnight hero = GetComponent<HeroKnight>();
         if(hero != null && hero.enabled)

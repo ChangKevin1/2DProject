@@ -19,16 +19,42 @@ public class SmoothCamera : MonoBehaviour
     [SerializeField] float zoomMax ;
     [SerializeField] List<float> zoomMin ;
     public int depth = -1;
-    Vector2 offsetMax = new Vector2(10, 10);
+    Vector2 offsetMax = new Vector2(5, 3);
     // Start is called before the first frame update
-    Vector2 inputRightStick = new Vector2();
+    public Vector2 inputRightStick = new Vector2(0,0);
     // Update is called once per frame
     void Update()
     {
-        if(Gamepad.all[0] != null)
+        if(Gamepad.current != null)
             inputRightStick = Gamepad.all[0].rightStick.value;
-        inputRightStick.x = Mathf.Clamp(inputRightStick.x *2 , -offsetMax.x, offsetMax.x);
-        inputRightStick.y = Mathf.Clamp(inputRightStick.y *2, -offsetMax.y, offsetMax.y);
+        if (Input.GetKey(KeyCode.L))
+        {
+            inputRightStick = new Vector2(Mathf.Lerp(inputRightStick.x, offsetMax.x, 0.15f),inputRightStick.y);
+        }
+        else if (Input.GetKey(KeyCode.J))
+        {
+            inputRightStick = new Vector2(-Mathf.Lerp(-inputRightStick.x, offsetMax.x, 0.15f), inputRightStick.y);
+        }
+        else
+        {
+            inputRightStick = new Vector2(Mathf.Lerp(inputRightStick.x, 0, 0.15f), inputRightStick.y);
+        }
+
+
+        if (Input.GetKey(KeyCode.I))
+        {
+            inputRightStick = new Vector2(inputRightStick.x, Mathf.Lerp(inputRightStick.y, offsetMax.y, 0.15f));
+        }
+        else if (Input.GetKey(KeyCode.K))
+        {
+            inputRightStick = new Vector2(inputRightStick.x, -Mathf.Lerp(-inputRightStick.y, offsetMax.y, 0.15f));
+        }
+        else
+        {
+            inputRightStick = new Vector2(inputRightStick.x, Mathf.Lerp(inputRightStick.y, 0, 0.15f));
+        }
+        inputRightStick.x = Mathf.Clamp(inputRightStick.x  , -offsetMax.x, offsetMax.x);
+        inputRightStick.y = Mathf.Clamp(inputRightStick.y , -offsetMax.y, offsetMax.y);
         camera.position = new Vector3(Mathf.Lerp(camera.position.x, followCube.position.x + offset.x + inputRightStick.x, smoothSpeed ), Mathf.Lerp(camera.position.y, followCube.position.y+offset.y + inputRightStick.y, smoothSpeed ) ,-10 + offset.z);
         if (zoom == true)
         {

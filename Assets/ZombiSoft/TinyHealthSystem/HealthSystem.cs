@@ -116,7 +116,7 @@ public class HealthSystem : MonoBehaviour
 
 		UpdateGraphics();
 
-		StartCoroutine(PlayerHurts());
+		//StartCoroutine(PlayerHurts());
 	}
 
 	public void HealDamage(float Heal)
